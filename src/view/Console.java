@@ -15,7 +15,6 @@ public class Console {
      */
     public String getConsoleLine() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        System.out.print("Enter String");
         String line = br.readLine();
         return line;
     }
