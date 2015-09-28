@@ -1,7 +1,7 @@
 package model;
 
 /**
- * Created by anil on 28.09.2015.
+ * Created by El Capitán on 28.09.2015.
  */
 public class Card {
     public enum Rank {
