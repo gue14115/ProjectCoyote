@@ -11,8 +11,16 @@ public class Card {
         Clubs, Diamonds, Hearts, Spades
     }
 
-    final Rank rank;
-    final Suite suite;
+    public Suite getSuite() {
+        return suite;
+    }
+
+    public Rank getRank() {
+        return rank;
+    }
+
+    private final Rank rank;
+    private final Suite suite;
 
     public Card(Rank rank, Suite suite){
         this.rank = rank;
