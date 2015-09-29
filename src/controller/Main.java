@@ -12,6 +12,8 @@ public class Main {
     static Dealer dealer;
     static Player self;
     static ConsoleAccess ca;
+    static int amountOfPlayers;
+    static int position;
     public static void main(String [ ] args)
     {
         ca = new ConsoleAccess();
@@ -26,6 +28,9 @@ public class Main {
         Player self = new Player(2);
         System.out.println("How many opponents are there?");
         int numberOfOpponents = ca.getInt();
-        //@TODO continue here
+        amountOfPlayers = numberOfOpponents+1; //+1 for yourself
+        System.out.println("Which position do you have? Small blind is 0 and it goes clockwise.");
+        position = ca.getInt();
+
     }
 }
