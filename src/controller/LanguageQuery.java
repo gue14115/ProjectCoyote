@@ -1,5 +1,6 @@
 package controller;
 
+import model.Suite;
 import view.ConsoleAccess;
 
 import java.util.Locale;
@@ -20,15 +21,11 @@ public class LanguageQuery {
     }
 
     /**
-     * Retrieves the ResourceBundle for ConsoleAccess.
+     * Retrieves the default language ResourceBundle for ConsoleAccess.
      * @return The ResourceBundle for the language of the console.
      */
     public ResourceBundle getConsoleAccessLocale(){
-        for (int i = 0; i < supportedConsoleAccessLocales.length; i ++) {
-            System.out.println(i+":"+supportedConsoleAccessLocales[i]);
-        }
-        int locale = ca.getInt();
-        ResourceBundle languageBundle = ResourceBundle.getBundle("ConsoleAccessBundle", supportedConsoleAccessLocales[locale]);
+        ResourceBundle languageBundle = ResourceBundle.getBundle("ConsoleAccessBundle", Locale.getDefault());
         return languageBundle;
     }
 }
