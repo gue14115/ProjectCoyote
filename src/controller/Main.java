@@ -1,9 +1,7 @@
 package controller;
 
 
-import model.Card;
-import model.Set;
-import model.Suite;
+import model.Dealer;
 
 /**
  * Created by El Capitán on 28.09.2015.
@@ -11,6 +9,6 @@ import model.Suite;
 public class Main {
     public static void main(String [ ] args)
     {
-        Set set = new Set();
+        Dealer dealer = new Dealer();
     }
 }
