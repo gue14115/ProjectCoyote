@@ -30,15 +30,15 @@ public class Main {
      * Sets up the game for Texas hold'em
      */
     public static void setUpTexas(){
-        ResourceBundle consoleBundle = langQ.getConsoleAccessLocale();
+        ResourceBundle consoleAccessBundle = langQ.getConsoleAccessLocale();
 
 
         Dealer dealer = new Dealer();
         Player self = new Player(2);
-        System.out.println(consoleBundle.getString("opponentQuery"));
+        System.out.println(consoleAccessBundle.getString("opponentQuery"));
         int numberOfOpponents = ca.getInt();
         amountOfPlayers = numberOfOpponents+1; //+1 for yourself
-        System.out.println(consoleBundle.getString("positionQuery"));
+        System.out.println(consoleAccessBundle.getString("positionQuery"));
         position = ca.getInt();
 
     }
