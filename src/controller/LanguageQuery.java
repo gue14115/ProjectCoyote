@@ -1,6 +1,5 @@
 package controller;
 
-import model.Suite;
 import view.ConsoleAccess;
 
 import java.util.Locale;
