@@ -1,6 +1,7 @@
 package controller;
 
 
+import model.Card;
 import model.Dealer;
 import model.Player;
 import view.ConsoleAccess;
@@ -33,17 +34,22 @@ public class Main {
         ResourceBundle consoleAccessBundle = langQ.getConsoleAccessLocale();
 
 
-        Dealer dealer = new Dealer();
+        dealer = new Dealer();
         Player self = new Player(2);
         System.out.println(consoleAccessBundle.getString("opponentQuery"));
         int numberOfOpponents = ca.getInt();
         amountOfPlayers = numberOfOpponents+1; //+1 for yourself
         System.out.println(consoleAccessBundle.getString("positionQuery"));
         position = ca.getInt();
+        System.out.println(consoleAccessBundle.getString("card1Player"));
+        Card firstCard = findCard(ca.getString());
+        System.out.println(consoleAccessBundle.getString("card2Player"));
+        Card secondCard = findCard(ca.getString());
+        /**
         for(int i = 0; i<52;i++){
                 System.out.println(dealer.set[i].getRank()+" "+dealer.set[i].getSuite());
         }
-
+**/
         /**
         System.out.println(consoleAccessBundle.getString("card1Query"));
         findCard(ca.getString());
@@ -52,11 +58,17 @@ public class Main {
          */
     }
 
-    public static void findCard(String cardString){
+    public static Card findCard(String cardString){
         StringTokenizer st = new StringTokenizer(cardString);
         String rank = st.nextToken();
         String suite = st.nextToken();
-        //Card c = dealer.getCardFromString(suite,rank);
-        //System.out.print(c.getRank());
+        Card foundCard = dealer.findCard(rank,suite);
+        if(foundCard!=null){
+            return foundCard;
+        }
+        else{
+            /**@TODO Tell user that input was in wrong format or that card was not in set.*/
+            return null;
+        }
     }
 }

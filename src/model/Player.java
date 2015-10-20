@@ -8,7 +8,7 @@ public class Player {
         return hand;
     }
 
-    public void setHand() {
+    public void setHand(Card[] hand) {
         this.hand = hand;
     }
 

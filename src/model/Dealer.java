@@ -20,5 +20,22 @@ public class Dealer {
         }
     }
 
+    public Card findCard(String rank, String suite){
+        int suiteCounter=0;
+        for(Card.Suite s : Card.Suite.values()){
+            if(suite.equals(s.toString())){
+                int rankCounter=0;
+                for(Card.Rank r : Card.Rank.values()){
+                    if(rank.equals(r.toString())){
+                        return set[suiteCounter*Card.Rank.values().length+rankCounter];
+                    }
+                    rankCounter++;
+                }
+            }
+            suiteCounter++;
+        }
+        return null;
+    }
+
 
 }
