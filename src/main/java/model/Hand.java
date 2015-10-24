@@ -2,6 +2,7 @@ package model;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Multiset;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
@@ -24,9 +25,9 @@ public class Hand {
 
     ArrayList<Card> cards;
     Multimap<Card.Suite, Card> cardsSortedBySuite;
+    Multimap<Card.Rank, Card> cardsSortedByRank;
 
     public Hand(Card[] playerCard, Card[] communityCards){
-        ArrayList<Card> cards;
         cards = new ArrayList<Card>();
         for(Card c: playerCard){
             if(c != null){
@@ -48,6 +49,11 @@ public class Hand {
         cardsSortedBySuite = ArrayListMultimap.create();
         for(Card c: cards){
             cardsSortedBySuite.put(c.getSuite(), c);
+        }
+        //Groups the Cards By Rank
+        cardsSortedByRank = ArrayListMultimap.create();
+        for(Card c: cards){
+            cardsSortedByRank.put(c.getRank(), c);
         }
     }
 
@@ -88,35 +94,109 @@ public class Hand {
     }
 
     public boolean isStraightFlush(){
-        throw new NotImplementedException();
+        Card[] suiteCards = null;
+        for(Card.Suite s1: Card.Suite.values()){
+            if(cardsSortedBySuite.get(s1).size() >= 5){
+                suiteCards = cardsSortedBySuite.get(s1).toArray(new Card[cardsSortedBySuite.get(s1).size()]);
+                break;
+            }
+        }
+        if(suiteCards == null){
+            return false;
+        }
+        int padding = 0;
+        while(suiteCards.length - padding >= 5){
+            int i = suiteCards[padding].getRank().ordinal();
+            boolean b = suiteCards[padding+1].getRank().ordinal() == i-1
+                    && suiteCards[padding+2].getRank().ordinal() == i-2
+                    && suiteCards[padding+3].getRank().ordinal() == i-3
+                    && suiteCards[padding+4].getRank().ordinal() == i-4;
+            if(b)
+                return b;
+            padding++;
+        }
+        return false;
     }
 
     public boolean isFour(){
-        throw new NotImplementedException();
+        for(Card.Rank k:cardsSortedByRank.keys()){
+            if(cardsSortedByRank.get(k).size() == 4){
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean isFullHouse(){
-        throw new NotImplementedException();
+        boolean two = false;
+        boolean three = false;
+        for(Card.Rank k:cardsSortedByRank.keys()){
+            if(cardsSortedByRank.get(k).size() >= 2){
+                if(cardsSortedByRank.get(k).size() >= 3 && !three){
+                    three = true;
+                }else{
+                    two = true;
+                }
+            }
+        }
+        return two && three;
     }
 
     public boolean isFlush(){
-        throw new NotImplementedException();
+        for(Card.Suite s1: Card.Suite.values()){
+            if(cardsSortedBySuite.get(s1).size() >= 5)
+                return true;
+        }
+        return false;
     }
 
     public boolean isStraight(){
-        throw new NotImplementedException();
+        int padding = 0;
+        Card.Rank[] ranks = cardsSortedByRank.keys().toArray(new Card.Rank[cardsSortedByRank.keys().size()]);
+        while(ranks.length - padding >= 5){
+            int i = ranks[padding].ordinal();
+            boolean b = ranks[padding+1].ordinal() == i-1
+                    && ranks[padding+2].ordinal() == i-2
+                    && ranks[padding+3].ordinal() == i-3
+                    && ranks[padding+4].ordinal() == i-4;
+            if(b)
+                return b;
+            padding++;
+        }
+        return false;
     }
 
     public boolean isThree(){
-        throw new NotImplementedException();
+        for(Card.Rank k:cardsSortedByRank.keys()){
+            if(cardsSortedByRank.get(k).size() >= 3){
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean isTwoPair(){
-        throw new NotImplementedException();
+        boolean two = false;
+        boolean three = false;
+        for(Card.Rank k:cardsSortedByRank.keys()){
+            if(cardsSortedByRank.get(k).size() >= 2){
+                if(!three){
+                    three = true;
+                }else{
+                    two = true;
+                }
+            }
+        }
+        return two && three;
     }
 
     public boolean isOnePair(){
-        throw new NotImplementedException();
+        for(Card.Rank k:cardsSortedByRank.keys()){
+            if(cardsSortedByRank.get(k).size() >= 2){
+                return true;
+            }
+        }
+        return false;
     }
 
 }
