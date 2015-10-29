@@ -2,6 +2,10 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import model.Card.Rank;
+import model.Card.Suite;
 
 /**
  * Created by El Capitán on 29.09.2015.
@@ -9,12 +13,14 @@ import java.util.Arrays;
 public class Dealer {
     public Card[] set;
     public Card[] communityCards;
+    private List<Boolean> draws;
 
     /**
      * Generates a set of all suites with their symbols.
      */
     public Dealer(){
     	communityCards = new Card[5];
+    	draws = new ArrayList<Boolean>();
         set = new Card[Card.Suite.values().length*Card.Rank.values().length];
 
         for(int suiteCounter=0;suiteCounter<Card.Suite.values().length;suiteCounter++){
@@ -24,9 +30,9 @@ public class Dealer {
         }
     }
 
-    public Card findCard(String rank, String suite){
+    /*public Card findCard(String rank, String suite){
     	return findCard(Card.Rank.valueOf(rank), Card.Suite.valueOf(suite));
-    }
+    }*/
 
     public Card findCard(Card.Rank rank, Card.Suite suite){
     	/* This doesn't need multiple loops because the position of the card
@@ -60,8 +66,48 @@ public class Dealer {
     	Card c = this.findCardInDeck(rank, suite);
         if(c!=null) {
             c.removeFromStack();
+            draws.add(true);
         }
     	return c;
+    }
+    
+    public float getPercentageOf(Card c){
+    	if(findCardInDeck(c.getRank(), c.getSuite()) == null){
+    		return 0;
+    	}
+    	float perc = (float) 1 / (set.length - draws.size());
+    	for(int i=0; i!=draws.size(); i++){
+    		if(!draws.get(i)){
+	    		int cardsBackThen = set.length - i;
+	    		perc = (float)perc * (cardsBackThen-1)/cardsBackThen;
+    		}
+    	}
+    	return perc;
+    	
+    }
+    
+    public float getPercentageOf(Rank r){
+    	float perc = 0;
+    	for(Suite s: Card.Suite.values()){
+    		perc += getPercentageOf(findCard(r,s));
+    	}
+    	return perc;
+    }
+    
+    public float getPercentageOf(Suite s){
+    	float perc = 0;
+    	for(Rank r: Rank.values()){
+    		perc += getPercentageOf(findCard(r,s));
+    	}
+    	return perc;
+    }
+    
+    public void drawUnknown(){
+    	draws.add(false);
+    }
+    
+    public void getChanceToWin(Hand h){
+    	//TODO
     }
 
 

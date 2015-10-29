@@ -2,6 +2,8 @@ package controller;
 
 
 import model.Card;
+import model.Card.Rank;
+import model.Card.Suite;
 import model.Dealer;
 import model.Player;
 import view.ConsoleAccess;
@@ -62,7 +64,7 @@ public class Main {
         StringTokenizer st = new StringTokenizer(cardString);
         String rank = st.nextToken();
         String suite = st.nextToken();
-        Card foundCard = dealer.findCard(rank,suite);
+        Card foundCard = dealer.findCard(Rank.valueOf(rank),Suite.valueOf(suite));
         if(foundCard!=null){
             return foundCard;
         }

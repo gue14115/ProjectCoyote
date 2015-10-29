@@ -47,5 +47,11 @@ public class Card {
     public boolean isInStack(){
         return this.inStack;
     }
+	@Override
+	public String toString() {
+		return rank.name() +" "+suite.name();
+	}
+    
+    
 
 }

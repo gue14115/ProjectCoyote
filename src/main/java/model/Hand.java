@@ -3,17 +3,20 @@ package model;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
+
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 
+import model.Card.Suite;
+
 /**
  * Created by Lukas on 24.10.2015.
  * This general purpose of this class to identify the value of a load of cards
  */
-public class Hand {
+public class Hand implements Comparable<Hand> {
 
     /**
      *
@@ -26,6 +29,8 @@ public class Hand {
     ArrayList<Card> cards;
     Multimap<Card.Suite, Card> cardsSortedBySuite;
     Multimap<Card.Rank, Card> cardsSortedByRank;
+    Hands hand;
+    Card highestCard;
 
     public Hand(Card[] playerCard, Card[] communityCards){
         cards = new ArrayList<Card>();
@@ -58,6 +63,10 @@ public class Hand {
     }
 
     public Hands getHand(){
+    	if(hand != null)
+    	{
+    		return hand;
+    	}
         if(isRoyalFlush())
             return Hands.Royal_Flush;
         if(isStraightFlush())
@@ -83,6 +92,7 @@ public class Hand {
         Card[] suiteCards = null;
         for(Card.Suite s1: Card.Suite.values()){
             if(cardsSortedBySuite.get(s1).size() >= 5){
+            	highestCard = cardsSortedBySuite.get(s1).iterator().next();
                 suiteCards = cardsSortedBySuite.get(s1).toArray(new Card[cardsSortedBySuite.get(s1).size()]);
                 break;
             }
@@ -97,6 +107,7 @@ public class Hand {
         Card[] suiteCards = null;
         for(Card.Suite s1: Card.Suite.values()){
             if(cardsSortedBySuite.get(s1).size() >= 5){
+            	highestCard = cardsSortedBySuite.get(s1).iterator().next();
                 suiteCards = cardsSortedBySuite.get(s1).toArray(new Card[cardsSortedBySuite.get(s1).size()]);
                 break;
             }
@@ -121,6 +132,7 @@ public class Hand {
     public boolean isFour(){
         for(Card.Rank k:cardsSortedByRank.keys()){
             if(cardsSortedByRank.get(k).size() == 4){
+            	highestCard = cardsSortedByRank.get(k).iterator().next();
                 return true;
             }
         }
@@ -134,6 +146,7 @@ public class Hand {
             if(cardsSortedByRank.get(k).size() >= 2){
                 if(cardsSortedByRank.get(k).size() >= 3 && !three){
                     three = true;
+                    highestCard = cardsSortedByRank.get(k).iterator().next();
                 }else{
                     two = true;
                 }
@@ -145,7 +158,10 @@ public class Hand {
     public boolean isFlush(){
         for(Card.Suite s1: Card.Suite.values()){
             if(cardsSortedBySuite.get(s1).size() >= 5)
+            {
+            	highestCard = cardsSortedBySuite.get(s1).iterator().next();
                 return true;
+            }
         }
         return false;
     }
@@ -159,8 +175,11 @@ public class Hand {
                     && ranks[padding+2].ordinal() == i-2
                     && ranks[padding+3].ordinal() == i-3
                     && ranks[padding+4].ordinal() == i-4;
-            if(b)
+            
+            if(b){
+            	highestCard = new Card(ranks[0], Suite.Clubs);
                 return b;
+            }
             padding++;
         }
         return false;
@@ -180,6 +199,8 @@ public class Hand {
         boolean three = false;
         for(Card.Rank k:cardsSortedByRank.keys()){
             if(cardsSortedByRank.get(k).size() >= 2){
+            	if(highestCard == null || highestCard.getRank().ordinal() < k.ordinal() )
+            		highestCard = new Card(k, Suite.Clubs);
                 if(!three){
                     three = true;
                 }else{
@@ -193,10 +214,22 @@ public class Hand {
     public boolean isOnePair(){
         for(Card.Rank k:cardsSortedByRank.keys()){
             if(cardsSortedByRank.get(k).size() >= 2){
+            	highestCard = new Card(k, Suite.Clubs);
                 return true;
             }
         }
         return false;
     }
+
+	public int compareTo(Hand hand) {
+		// TODO Auto-generated method stub
+		return this.getIndex() - hand.getIndex();
+	}
+	
+	public int getIndex(){
+		int i = this.getHand().ordinal() * 100;
+		i    += this.highestCard.getRank().ordinal();
+		return i;
+	}
 
 }
